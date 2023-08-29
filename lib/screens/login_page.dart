@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home_page.dart';
+// import 'package:flutter_application_1/screens/home_page.dart';
 import 'package:flutter_application_1/utils/routes.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool changeButton = false;
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -19,9 +26,10 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 20.0,
               ),
-              const Text(
-                "Welcome",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              Text(
+                "Welcome $name",
+                style:
+                    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -29,24 +37,61 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFormField(
-                        decoration: const InputDecoration(
-                            hintText: "Enter a Username",
-                            label: Text("Username"))),
+                      decoration: const InputDecoration(
+                          hintText: "Enter a Username",
+                          label: Text("Username")),
+                      onChanged: (value) {
+                        name = value;
+                        setState(() {});
+                      },
+                    ),
                     TextFormField(
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            hintText: "Enter Password",
-                            label: Text("Password"))),
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          hintText: "Enter Password", label: Text("Password")),
+                    ),
                     const SizedBox(
                       height: 40,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          changeButton = true;
+                        });
+                        await Future.delayed(Duration(seconds: 1));
                         Navigator.pushNamed(context, MyRoutes.homeRoute);
                       },
-                      child: Text("Login"),
-                      style: TextButton.styleFrom(minimumSize: Size(140, 40)),
-                    )
+                      child: AnimatedContainer(
+                        duration: Duration(seconds: 1),
+                        width: changeButton ? 50 : 150,
+                        height: 50,
+                        alignment: Alignment.center,
+                        child: changeButton
+                            ? Icon(
+                                Icons.done,
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(changeButton ? 50 : 8),
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.pushNamed(context, MyRoutes.homeRoute);
+                    //   },
+                    //   child:  Text("Login"),
+                    //   style: TextButton.styleFrom(minimumSize: Size(140, 40)),
+                    // )
                   ],
                 ),
               )
